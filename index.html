@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trabalho de Visualização de Dados</title>
+  <link rel="stylesheet" href="style.css">
+
+  <!-- D3.js v7 -->
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <!-- topojson-client, necessário só para o mapa do Redesign B -->
+  <script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
+</head>
+<body>
+
+  <header class="intro">
+    <h1>Redesign — UFO Sightings</h1>
+    <p class="subtitle">
+      Crítica e reconstrução de "UFO Sightings over Time" (2026 WK25), a partir do
+      dataset da <a href="https://www.kaggle.com/datasets/joebeachcapital/ufo-sightings" target="_blank" rel="noopener">Kaggle</a>.
+    </p>
+  </header>
+
+  <main>
+    <section id="redesign-a" class="chart-section">
+      <h2>Redesign A — Série temporal com escala real</h2>
+      <p class="chart-note">
+        Gráfico de área com <code>d3.scaleTime()</code>: o eixo X respeita a distância real
+        entre datas. Agregação mensal, filtrada a partir de 2020 (período com densidade de dados
+        suficiente para uma leitura honesta da tendência).
+      </p>
+      <div id="chart-a" class="chart-container"></div>
+    </section>
+
+    <section id="redesign-b" class="chart-section">
+      <h2>Redesign B — Distribuição espacial (EUA)</h2>
+      <p class="chart-note">
+        Cada ponto é um avistamento, projetado com <code>d3.geoAlbersUsa()</code> a partir de
+        latitude/longitude. A cor identifica os formatos ("shape") mais reportados.
+      </p>
+      <div id="chart-b" class="chart-container"></div>
+      <div id="legend-b" class="legend"></div>
+    </section>
+
+    <section id="redesign-b2" class="chart-section">
+      <h2>Redesign B (complementar) — Formatos mais reportados</h2>
+      <p class="chart-note">
+        Ranking ordenado dos formatos de objeto, substituindo a contagem bruta e sem contexto
+        do gráfico original.
+      </p>
+      <div id="chart-b2" class="chart-container"></div>
+    </section>
+  </main>
+
+  <div id="tooltip" class="tooltip"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
