@@ -42,8 +42,8 @@ d3.csv("data/ufo_dataset.csv", d3.autoType).then(raw => {
    REDESIGN A — Série temporal real (d3.scaleTime)
    Corrige o eixo X distorcido do original: aqui a distância
    visual entre dois pontos é proporcional ao tempo real entre
-   eles, e só desenhamos a linha onde há dados contínuos
-   (2020 em diante), evitando a falsa tendência 1975–2010.
+   eles, e só desenheii a linha onde há dados contínuos
+   (2020 em diante) evitando a falsa tendência 1975–2010.
    ========================================================= */
 function renderRedesignA(data){
 
@@ -147,8 +147,8 @@ function renderRedesignA(data){
 
 /* =========================================================
    REDESIGN B — Mapa de pontos (d3.geoAlbersUsa)
-   Usa lat/lng reais do dataset, algo completamente ignorado
-   no gráfico original apesar de estar disponível no ficheiro.
+   Usa lat/lng reais do dataset algo completamente ignorado
+   no gráfico original apesar de estar disponível no dataset.
    ========================================================= */
 function renderRedesignB(data){
 
