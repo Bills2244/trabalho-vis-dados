@@ -28,7 +28,6 @@ d3.csv("data/ufo_dataset.csv", d3.autoType).then(raw => {
 
   renderRedesignA(data);
   renderRedesignB(data);
-  renderRedesignB2(data);
 
 }).catch(err => {
   console.error("Não foi possível carregar data/ufo_dataset.csv", err);
@@ -222,63 +221,4 @@ function renderRedesignB(data){
       .style("font-size", "13px")
       .text("Falha ao carregar o contorno dos EUA (verifique a ligação à internet).");
   });
-}
-
-
-/* =========================================================
-   REDESIGN B (complementar) — Formatos ordenados
-   Alternativa/adicional ao mapa: ranking legível dos "shape",
-   um atributo que o gráfico original também ignorava.
-   ========================================================= */
-function renderRedesignB2(data){
-
-  const container = d3.select("#chart-b2");
-  container.select("svg").remove();
-
-  const counts = Array.from(
-    d3.rollup(data, v => v.length, d => d.shape || "Desconhecido"),
-    ([shape, count]) => ({ shape, count })
-  ).sort((a, b) => d3.descending(a.count, b.count)).slice(0, 12);
-
-  const width = 900;
-  const rowHeight = 26;
-  const margin = { top: 10, right: 50, bottom: 10, left: 110 };
-  const height = margin.top + margin.bottom + counts.length * rowHeight;
-
-  const svg = container.append("svg")
-    .attr("viewBox", `0 0 ${width} ${height}`)
-    .attr("width", "100%")
-    .attr("height", height);
-
-  const x = d3.scaleLinear()
-    .domain([0, d3.max(counts, d => d.count)])
-    .range([0, width - margin.left - margin.right]);
-
-  const rows = svg.selectAll("g.row")
-    .data(counts)
-    .join("g")
-    .attr("class", "row")
-    .attr("transform", (d, i) => `translate(${margin.left},${margin.top + i * rowHeight})`);
-
-  rows.append("text")
-    .attr("class", "bar-label")
-    .attr("x", -10)
-    .attr("y", rowHeight / 2 + 4)
-    .attr("text-anchor", "end")
-    .text(d => d.shape);
-
-  rows.append("rect")
-    .attr("class", "bar")
-    .attr("y", 5)
-    .attr("height", rowHeight - 10)
-    .attr("width", d => Math.max(x(d.count), 2))
-    .attr("rx", 2)
-    .on("mousemove", (event, d) => showTooltip(`<b>${d.shape}</b><br>${d.count} avistamentos`, event))
-    .on("mouseleave", hideTooltip);
-
-  rows.append("text")
-    .attr("class", "bar-value")
-    .attr("x", d => x(d.count) + 8)
-    .attr("y", rowHeight / 2 + 4)
-    .text(d => d.count);
 }
