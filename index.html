@@ -4,47 +4,141 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Trabalho de Visualização de Dados</title>
+  <link rel="icon" href="data:,">
   <link rel="stylesheet" href="style.css">
 
-  <!-- D3.js v7 -->
   <script src="https://d3js.org/d3.v7.min.js"></script>
-  <!-- topojson-client, necessário só para o mapa do Redesign B -->
-  <script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
 </head>
 <body>
 
   <header class="intro">
-    <h1>Redesign — UFO Sightings</h1>
-    <p class="subtitle">
-      Crítica e reconstrução de "UFO Sightings over Time" (2026 WK25), a partir do
-      dataset da <a href="https://www.kaggle.com/datasets/joebeachcapital/ufo-sightings" target="_blank" rel="noopener">Kaggle</a>.
-    </p>
+    <h1>Redesign crítico de visualizações</h1>
+    <p class="subtitle">Trabalho de Visualização de Dados. Três gráficos do Makeover Monday refeitos com D3.js e DuckDB.</p>
   </header>
 
   <main>
-    <section id="redesign-a" class="chart-section">
-      <h2>Redesign A — Série temporal com escala real</h2>
-      <p class="chart-note">
-        Gráfico de área com <code>d3.scaleTime()</code>: o eixo X respeita a distância real
-        entre datas. Agregação mensal, filtrada a partir de 2020 (período com densidade de dados
-        suficiente para uma leitura honesta da tendência).
+    <article class="case">
+      <h2>Caso 1: UFO Sightings over Time</h2>
+      <p class="case-info">
+        Fonte: Makeover Monday <a href="https://makeovermonday.vercel.app/dataset/2026-wk25-ufo-sightings" target="_blank">2026 W25</a>,
+        dados do NUFORC no <a href="https://www.kaggle.com/datasets/joebeachcapital/ufo-sightings" target="_blank">Kaggle</a>.<br>
+        Pergunta: os avistamentos de OVNI estão aumentando com o tempo?
       </p>
-      <div id="chart-a" class="chart-container"></div>
-    </section>
 
-    <section id="redesign-b" class="chart-section">
-      <h2>Redesign B — Distribuição espacial (EUA)</h2>
-      <p class="chart-note">
-        Cada ponto é um avistamento, projetado com <code>d3.geoAlbersUsa()</code> a partir de
-        latitude/longitude. A cor identifica os formatos ("shape") mais reportados.
+      <section class="chart-section">
+        <h3>Original</h3>
+        <figure class="original">
+          <img src="img/ufo-original.png" alt="Gráfico original UFO Sightings over Time">
+        </figure>
+        <p class="chart-note">
+          Os anos ficam com o mesmo espaço no eixo X mesmo quando tem décadas entre eles,
+          e a linha liga anos com 1 relato até 2022.
+        </p>
+      </section>
+
+      <section class="chart-section">
+        <h3>Redesign A: avistamentos por mês</h3>
+        <p class="chart-note">
+          Uma barra por mês, com o valor em cima. Usamos só jan/2022 a fev/2023, porque os relatos do dataset
+          foram postados entre dez/2021 e mar/2023 e os outros períodos estão incompletos.
+        </p>
+        <div id="chart-ufo-a" class="chart-container"></div>
+      </section>
+
+      <section class="chart-section">
+        <h3>Redesign B: avistamentos por dia da semana e hora</h3>
+        <p class="chart-note">
+          Heatmap com o total de relatos em cada combinação de dia da semana e hora do dia.
+          Mostra quando as pessoas mais relatam avistamentos, coisa que o total por ano esconde.
+        </p>
+        <div class="chart-container">
+          <div id="chart-ufo-b"></div>
+          <div id="legend-ufo-b" class="legend"></div>
+        </div>
+      </section>
+    </article>
+
+    <article class="case">
+      <h2>Caso 2: Songs with Cowbell</h2>
+      <p class="case-info">
+        Fonte: Makeover Monday <a href="https://makeovermonday.vercel.app/dataset/songs-with-cowbell" target="_blank">2026 W40</a>,
+        dados de <a href="https://cowbellsongs.com/the-list/" target="_blank">cowbellsongs.com</a>.<br>
+        Pergunta: quais artistas mais usam cowbell nas músicas?
       </p>
-      <div id="chart-b" class="chart-container"></div>
-      <div id="legend-b" class="legend"></div>
-    </section>
+
+      <section class="chart-section">
+        <h3>Original</h3>
+        <figure class="original">
+          <img src="img/cowbell-original.png" alt="Gráfico original Artists with the Most Cowbell">
+        </figure>
+        <p class="chart-note">
+          Os totais aparecem com casa decimal, as barras não têm preenchimento e o ranking corta em 20
+          no meio de um empate (16 artistas têm 4 músicas e só 9 aparecem). Os totais também não batem
+          com o arquivo, que tem 661 linhas, músicas repetidas e artistas escritos de formas diferentes.
+        </p>
+      </section>
+
+      <section class="chart-section">
+        <h3>Redesign A: cada música é um quadrado</h3>
+        <p class="chart-note">
+          Todos os 27 artistas com 4 ou mais músicas, sem cortar empates. Cada quadrado é uma música,
+          passando o mouse aparece o nome dela. Os nomes repetidos foram corrigidos no DuckDB.
+        </p>
+        <div id="chart-cowbell-a" class="chart-container"></div>
+      </section>
+
+      <section class="chart-section">
+        <h3>Redesign B: quantas músicas cada artista tem</h3>
+        <p class="chart-note">
+          Histograma do número de músicas por artista. Em laranja está a parte que o original mostra,
+          a maioria dos artistas tem só uma música.
+        </p>
+        <div id="chart-cowbell-b" class="chart-container"></div>
+      </section>
+    </article>
+
+    <article class="case">
+      <h2>Caso 3: What are the world’s deadliest animals?</h2>
+      <p class="case-info">
+        Fonte: Makeover Monday <a href="https://makeovermonday.vercel.app/dataset/what-are-the-world-s-deadliest-animals" target="_blank">2026 W37</a>,
+        gráfico do <a href="https://ourworldindata.org/" target="_blank">Our World in Data</a>.<br>
+        Pergunta: quais animais mais matam pessoas por ano?
+      </p>
+
+      <section class="chart-section">
+        <h3>Original</h3>
+        <figure class="original">
+          <img src="img/animals-original.png" alt="Gráfico original What are the world’s deadliest animals">
+        </figure>
+        <p class="chart-note">
+          Mosquitos e humanos são mostrados como área de um quadrado e os outros animais como comprimento
+          de barra, então não dá para comparar os dois grupos. Na escala linear, quase metade das barras fica
+          invisível, e os valores marcados com "&gt;" (mínimo) aparecem igual aos outros.
+        </p>
+      </section>
+
+      <section class="chart-section">
+        <h3>Redesign A: todos os animais na mesma escala</h3>
+        <p class="chart-note">
+          Barras com escala logarítmica, então todos os 21 animais aparecem e podem ser comparados.
+          Humanos em cinza e as estimativas mínimas ("&gt;") com a cor mais apagada.
+        </p>
+        <div id="chart-animals-a" class="chart-container"></div>
+      </section>
+
+      <section class="chart-section">
+        <h3>Redesign B: de onde vêm as mortes</h3>
+        <p class="chart-note">
+          Waffle com 100 quadrados, cada um é 1% das mortes, colorido pelo tipo de animal. Mostra que
+          os insetos (quase todos mosquitos) são metade das mortes e os humanos quase 40%.
+        </p>
+        <div id="chart-animals-b" class="chart-container"></div>
+      </section>
+    </article>
   </main>
 
   <div id="tooltip" class="tooltip"></div>
 
-  <script src="app.js"></script>
+  <script type="module" src="app.js"></script>
 </body>
 </html>
