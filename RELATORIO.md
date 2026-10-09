@@ -1,6 +1,6 @@
 # Relatório: Redesign Crítico de Visualizações de Dados
 
-**Integrantes:** _(preencher)_
+**Integrantes:** Matheus Henrique Reis, Gabriel do Câmara Castilho Alvares e João da Costa de Paula Antunes
 
 ## 1. Introdução
 
