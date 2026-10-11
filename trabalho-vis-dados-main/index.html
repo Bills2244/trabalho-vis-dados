@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trabalho de Visualização de Dados</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="style.css">
+
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+
+  <header class="intro">
+    <h1>Redesign crítico de visualizações</h1>
+    <p class="subtitle">Trabalho de Visualização de Dados. Dois gráficos do Makeover Monday refeitos com D3.js e DuckDB, os ultimos graficos estão na pasta (parte-joão-da-costa-de-paula-antunes).</p>
+  </header>
+
+  <main>
+    <article class="case">
+      <h2>Caso 1: Songs with Cowbell</h2>
+      <p class="case-info">
+        Fonte: Makeover Monday <a href="https://makeovermonday.vercel.app/dataset/songs-with-cowbell" target="_blank">2026 W40</a>,
+        dados de <a href="https://cowbellsongs.com/the-list/" target="_blank">cowbellsongs.com</a>.<br>
+        Pergunta: quais artistas mais usam cowbell nas músicas?
+      </p>
+
+      <section class="chart-section">
+        <h3>Original</h3>
+        <figure class="original">
+          <img src="img/cowbell-original.png" alt="Gráfico original Artists with the Most Cowbell">
+        </figure>
+        <p class="chart-note">
+          Os totais aparecem com casa decimal, as barras não têm preenchimento e o ranking corta em 20
+          no meio de um empate (16 artistas têm 4 músicas e só 9 aparecem). Os totais também não batem
+          com o arquivo, que tem 661 linhas, músicas repetidas e artistas escritos de formas diferentes.
+        </p>
+      </section>
+
+      <section class="chart-section">
+        <h3>Redesign A: cada música é um quadrado</h3>
+        <p class="chart-note">
+          Todos os 27 artistas com 4 ou mais músicas, sem cortar empates. Cada quadrado é uma música,
+          passando o mouse aparece o nome dela. Os nomes repetidos foram corrigidos no DuckDB.
+        </p>
+        <div id="chart-cowbell-a" class="chart-container"></div>
+      </section>
+
+      <section class="chart-section">
+        <h3>Redesign B: quantas músicas cada artista tem</h3>
+        <p class="chart-note">
+          Histograma do número de músicas por artista. Em laranja está a parte que o original mostra,
+          a maioria dos artistas tem só uma música.
+        </p>
+        <div id="chart-cowbell-b" class="chart-container"></div>
+      </section>
+    </article>
+
+    <article class="case">
+      <h2>Caso 2: What are the world’s deadliest animals?</h2>
+      <p class="case-info">
+        Fonte: Makeover Monday <a href="https://makeovermonday.vercel.app/dataset/what-are-the-world-s-deadliest-animals" target="_blank">2026 W37</a>,
+        gráfico do <a href="https://ourworldindata.org/" target="_blank">Our World in Data</a>.<br>
+        Pergunta: quais animais mais matam pessoas por ano?
+      </p>
+
+      <section class="chart-section">
+        <h3>Original</h3>
+        <figure class="original">
+          <img src="img/animals-original.png" alt="Gráfico original What are the world’s deadliest animals">
+        </figure>
+        <p class="chart-note">
+          Mosquitos e humanos são mostrados como área de um quadrado e os outros animais como comprimento
+          de barra, então não dá para comparar os dois grupos. Na escala linear, quase metade das barras fica
+          invisível, e os valores marcados com "&gt;" (mínimo) aparecem igual aos outros.
+        </p>
+      </section>
+
+      <section class="chart-section">
+        <h3>Redesign A: todos os animais na mesma escala</h3>
+        <p class="chart-note">
+          Barras com escala logarítmica, então todos os 21 animais aparecem e podem ser comparados.
+          Humanos em cinza e as estimativas mínimas ("&gt;") com a cor mais apagada.
+        </p>
+        <div id="chart-animals-a" class="chart-container"></div>
+      </section>
+
+      <section class="chart-section">
+        <h3>Redesign B: de onde vêm as mortes</h3>
+        <p class="chart-note">
+          Waffle com 100 quadrados, cada um é 1% das mortes, colorido pelo tipo de animal. Mostra que
+          os insetos (quase todos mosquitos) são metade das mortes e os humanos quase 40%.
+        </p>
+        <div id="chart-animals-b" class="chart-container"></div>
+      </section>
+    </article>
+  </main>
+
+  <div id="tooltip" class="tooltip"></div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
